@@ -1,5 +1,3 @@
-
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -23,50 +21,49 @@ public class Cliente {
     InetSocketAddress direccionServidor = new InetSocketAddress(IP_SERVER, PUERTO);
 
     try (Scanner sc = new Scanner(System.in);){
+
+    System.out.println("Estableciendo conexión con el servidor");
+    Socket socketAlServidor = new Socket();
+    socketAlServidor.connect(direccionServidor);
+
     int opcion = 0;
     int isbn = 0;
-    String autor;
-        
+    String titulo = null;
+
+    InputStreamReader entrada = new InputStreamReader(socketAlServidor.getInputStream());
+    BufferedReader bf = new BufferedReader(entrada);
+    PrintStream salida = new PrintStream(socketAlServidor.getOutputStream());
+
     do {
     System.out.println("-----Consulta de libros-----");
     System.out.println("1- Consultar libro por ISBN");
     System.out.println("2- Consultar libro por titulo");
     System.out.println("3- Salir de la aplicación");
     System.out.println("-----------------------------");
+
     opcion = sc.nextInt();
+    salida.println(opcion);
+    System.out.println("Conexion establecida... a " + IP_SERVER + " por el puerto " + PUERTO);
     
-    Socket socketAlServidor = new Socket();
+
     if (opcion == 1){
-        System.out.println("Escriba el ISBN:");
+        String mensajeServidor = bf.readLine();
+	    System.out.println(mensajeServidor);
         isbn = sc.nextInt();
-        System.out.println("Conectandose al serivdor...");
-        socketAlServidor.connect(direccionServidor);			
-        System.out.println("Conexion establecida... a " + IP_SERVER + " por el puerto " + PUERTO);
     }else if (opcion == 2) {
-        System.out.println("Conectandose al serivdor...");
-        socketAlServidor.connect(direccionServidor);			
-        System.out.println("Conexion establecida... a " + IP_SERVER + " por el puerto " + PUERTO);
+        String mensajeServidor = bf.readLine();
+	    System.out.println(mensajeServidor);
+        titulo = sc.nextLine();
     }else if (opcion == 3){
-        System.out.println("Cerrando aplicación");
+        String mensajeServidor = bf.readLine();
+	    System.out.println(mensajeServidor);
     }else {
-        System.out.println("Tiene que elegir una de las opciones");
+        String mensajeServidor = bf.readLine();
+        System.out.println(mensajeServidor);
     }
     
-    
-			
-	PrintStream salida = new PrintStream(socketAlServidor.getOutputStream());
-    salida.println(opcion);
-    salida.println(isbn);
-	InputStreamReader entrada = new InputStreamReader(socketAlServidor.getInputStream());
-	BufferedReader bf = new BufferedReader(entrada);
-			
-	System.out.println("Esperando al resultado del servidor...");
-	String mensajeServidor = bf.readLine();
-				
-	System.out.println("Mensaje del servidor: " + mensajeServidor);//7
-	socketAlServidor.close();
     }while (opcion != 3); 
-        
+    socketAlServidor.close();
 		} catch (UnknownHostException e) {
 			System.err.println("No se puede conectar a:" + IP_SERVER);
 			e.printStackTrace();
@@ -82,4 +79,3 @@ public class Cliente {
 	}
 
 }
-
