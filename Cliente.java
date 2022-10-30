@@ -57,6 +57,7 @@ public class Cliente {
     }else if (opcion == 2) {
         String mensajeServidor = bf.readLine();
 	    System.out.println(mensajeServidor);
+	    String saltoLinea = sc.nextLine();
         titulo = sc.nextLine();
         salida.println(titulo);
         mensajeServidor = bf.readLine();
