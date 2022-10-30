@@ -3,6 +3,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.net.Socket;
+import java.util.ArrayList;
 
 public class HiloLibreria implements Runnable{
 	private Thread hilo;
@@ -22,27 +23,67 @@ public class HiloLibreria implements Runnable{
 		PrintStream salida = null;
 		InputStreamReader entrada = null;
 		BufferedReader bf = null;
-        
+		boolean isbnMandado = false;
+		boolean tituloMandado = false;
 		
+		ArrayList<Libro> listaLibros = new ArrayList<Libro>();
+        Libro l1 = new Libro("Odisea", "Homero", 15, "78153012");
+        Libro l2 = new Libro("Don Quijote de la Mancha", "Miguel de cervantes", 20, "10347860");
+        Libro l3 = new Libro("Diario", "Ana Frank", 13, "45896301");
+        Libro l4 = new Libro("Codigo Da Vinci", "Dan Brown", 22, "13461973");
+        Libro l5 = new Libro("Arte de la Guerra", "Sun Tzu", 8, "38792540");
+        listaLibros.add(l1);
+        listaLibros.add(l2);
+        listaLibros.add(l3);
+        listaLibros.add(l4);
+        listaLibros.add(l5);
+
         try {	
 			salida = new PrintStream(socketAlCliente.getOutputStream());
 			entrada = new InputStreamReader(socketAlCliente.getInputStream());
 			bf = new BufferedReader(entrada);
             boolean continuar = true;
 			while(continuar){		
+				System.out.println("Esperando que el " +hilo.getName() + " eliga una opción");
 				String opcionCliente = bf.readLine();	
-				System.out.println("El cliente ha elegido la opción: " + opcionCliente);
+				System.out.println("El " + hilo.getName()+ " ha elegido la opción: " + opcionCliente);
 				
                 switch (opcionCliente) {
                     case "1":
                         salida.println("Servidor: Escriba el ISBN");
+						System.out.println("Esperando que el " +hilo.getName() + " mande un Isbn");
                         String isbnCliente = bf.readLine();	
-				        System.out.println("El cliente ha mandado el ISBN: " + isbnCliente);
+				        System.out.println("El " + hilo.getName() +  " cliente ha mandado el ISBN: " + isbnCliente);
+						for (int i = 0; i < listaLibros.size(); i++) {
+                            Libro libros = listaLibros.get(i);
+                            if (isbnCliente.equals(libros.getIsbn())) {
+								isbnMandado = true;
+								System.out.println(libros);
+								salida.println(libros);
+							}
+                        }
+						if (isbnMandado == false) {
+							salida.println("Servidor: No se encuentra el ISBN en la base de datos");
+							System.out.println("No se encuentra el ISBN en la base de datos");
+						}
                     break;
                     case "2":
-                        salida.println("Servidor: Escriba el título");
+					salida.println("Servidor: Escriba el titulo");
+						System.out.println("Esperando que el " +hilo.getName() + " mande un titulo");
                         String tituloCliente = bf.readLine();	
-				        System.out.println("El cliente ha mandado el ISBN: " + tituloCliente);
+				        System.out.println("El " + hilo.getName() +  " cliente ha mandado el titulo: " + tituloCliente);
+						for (int i = 0; i < listaLibros.size(); i++) {
+                            Libro libros = listaLibros.get(i);
+                            if (tituloCliente.equals(libros.getTitulo())) {
+								tituloMandado = true;
+								System.out.println(libros);
+								salida.println(libros);
+							}
+                        }
+						if (tituloMandado == false) {
+							salida.println("Servidor: No se encuentra el titulo en la base de datos");
+							System.out.println("No se encuentra el titulo en la base de datos");
+						}
                     break;
                     case "3":
                         salida.println("Servidor: Ha salido de la aplicacion");
@@ -55,6 +96,8 @@ public class HiloLibreria implements Runnable{
 				        System.out.println("El cliente ha elegido la opción: " + opcionCliente + ", solicitando otra respuesta");
                         break;
                 }
+				
+				
 
 			}
             socketAlCliente.close();

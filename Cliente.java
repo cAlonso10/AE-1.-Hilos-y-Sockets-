@@ -26,9 +26,10 @@ public class Cliente {
     Socket socketAlServidor = new Socket();
     socketAlServidor.connect(direccionServidor);
 
-    int opcion = 0;
+    int opcion ;
     int isbn = 0;
-    String titulo = null;
+    String titulo;
+    
 
     InputStreamReader entrada = new InputStreamReader(socketAlServidor.getInputStream());
     BufferedReader bf = new BufferedReader(entrada);
@@ -50,10 +51,16 @@ public class Cliente {
         String mensajeServidor = bf.readLine();
 	    System.out.println(mensajeServidor);
         isbn = sc.nextInt();
+        salida.println(isbn);
+        mensajeServidor = bf.readLine();
+        System.out.println(mensajeServidor);
     }else if (opcion == 2) {
         String mensajeServidor = bf.readLine();
 	    System.out.println(mensajeServidor);
         titulo = sc.nextLine();
+        salida.println(titulo);
+        mensajeServidor = bf.readLine();
+        System.out.println(mensajeServidor);
     }else if (opcion == 3){
         String mensajeServidor = bf.readLine();
 	    System.out.println(mensajeServidor);
