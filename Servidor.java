@@ -7,6 +7,12 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 public class Servidor {
+
+    Libro l1 = new Libro("Odisea", "Homero", 15, 78153012);
+    Libro l2 = new Libro("Don Quijote de la Mancha", "Miguel de cervantes", 20, 10347860);
+    Libro l3 = new Libro("Diario", "Ana Frank", 13, 45896301);
+    Libro l4 = new Libro("Codigo Da Vinci", "Dan Brown", 22, 13461973);
+    Libro l5 = new Libro("Arte de la Guerra", "Sun Tzu", 8, 38792540);
     
     public static final int PUERTO = 4000;
     
