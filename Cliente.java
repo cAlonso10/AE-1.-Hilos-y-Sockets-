@@ -29,6 +29,7 @@ public class Cliente {
     int opcion ;
     int isbn = 0;
     String titulo;
+    String autor;
     
 
     InputStreamReader entrada = new InputStreamReader(socketAlServidor.getInputStream());
@@ -39,7 +40,9 @@ public class Cliente {
     System.out.println("-----Consulta de libros-----");
     System.out.println("1- Consultar libro por ISBN");
     System.out.println("2- Consultar libro por titulo");
-    System.out.println("3- Salir de la aplicación");
+    System.out.println("3- Consultar libros por autor");
+    System.out.println("4- Añadir Libro");
+    System.out.println("5- Salir de la aplicación");
     System.out.println("-----------------------------");
 
     opcion = sc.nextInt();
@@ -62,7 +65,18 @@ public class Cliente {
         salida.println(titulo);
         mensajeServidor = bf.readLine();
         System.out.println(mensajeServidor);
-    }else if (opcion == 3){
+    }else if (opcion == 3) {
+    	String mensajeServidor = bf.readLine();
+	    System.out.println(mensajeServidor);
+	    String saltoLinea = sc.nextLine();
+        autor = sc.nextLine();
+        salida.println(autor);
+        mensajeServidor = bf.readLine();
+        System.out.println(mensajeServidor);
+    }else if(opcion == 4) {
+    	String mensajeServidor = bf.readLine();
+	    System.out.println(mensajeServidor);
+    }else if (opcion == 5){
         String mensajeServidor = bf.readLine();
 	    System.out.println(mensajeServidor);
     }else {
@@ -70,7 +84,7 @@ public class Cliente {
         System.out.println(mensajeServidor);
     }
     
-    }while (opcion != 3); 
+    }while (opcion != 5); 
     socketAlServidor.close();
 		} catch (UnknownHostException e) {
 			System.err.println("No se puede conectar a:" + IP_SERVER);

@@ -42,7 +42,7 @@ public class Libro {
 
     @Override
     public String toString() {
-        return "Información del libro [Titulo:" + titulo + ", Autor:" + autor + ", Precio:" + precio + ", Isbn:" + isbn + "]";
+        return "Libro [Titulo:" + titulo + ", Autor:" + autor + ", Precio:" + precio + ", Isbn:" + isbn + "]";
     }
 
     

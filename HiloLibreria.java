@@ -26,17 +26,20 @@ public class HiloLibreria implements Runnable{
 		boolean isbnMandado = false;
 		boolean tituloMandado = false;
 		
+		
 		ArrayList<Libro> listaLibros = new ArrayList<Libro>();
         Libro l1 = new Libro("Odisea", "Homero", 15, "78153012");
         Libro l2 = new Libro("Don Quijote de la Mancha", "Miguel de cervantes", 20, "10347860");
         Libro l3 = new Libro("Diario", "Ana Frank", 13, "45896301");
         Libro l4 = new Libro("Codigo Da Vinci", "Dan Brown", 22, "13461973");
         Libro l5 = new Libro("Arte de la Guerra", "Sun Tzu", 8, "38792540");
+        Libro l6 = new Libro("Iliada", "Homero", 16, "78153565");
         listaLibros.add(l1);
         listaLibros.add(l2);
         listaLibros.add(l3);
         listaLibros.add(l4);
         listaLibros.add(l5);
+        listaLibros.add(l6);
 
         try {	
 			salida = new PrintStream(socketAlCliente.getOutputStream());
@@ -86,12 +89,38 @@ public class HiloLibreria implements Runnable{
 						}
                     break;
                     case "3":
+    					salida.println("Servidor: Escriba el Autor");
+    						System.out.println("Esperando que el " +hilo.getName() + " mande un Autor");
+                            String autorCliente = bf.readLine();	
+    				        System.out.println("El " + hilo.getName() +  " cliente ha mandado el titulo: " + autorCliente);
+                            ArrayList<String> librosEncontrados = new ArrayList<String>();
+                            
+                            librosEncontrados.clear();
+    						for (int i = 0; i < listaLibros.size(); i++) {	
+                                if (autorCliente.equals(listaLibros.get(i).getAutor())) {
+    								librosEncontrados.add((listaLibros.get(i)).toString());
+                            }
+    						
+    						}if (librosEncontrados.isEmpty()) {
+    							salida.println("Servidor: No se encuentra el autor en la base de datos");
+    							System.out.println("No se encuentra el autor en la base de datos");
+    						
+    						}else {
+    						System.out.println(librosEncontrados);
+							salida.println("Se ha encontrado:" + librosEncontrados);
+    						}
+                        break;
+                    case "4":
+                        salida.println("Servidor: Ha salido de la aplicacion");
+                        socketAlCliente.close();
+                    break;
+                    case "5":
                         salida.println("Servidor: Ha salido de la aplicacion");
                         socketAlCliente.close();
                     break;
                 
                     default:
-                        salida.println("Servidor: Tiene que elegir las opciones 1,2 o 3");
+                        salida.println("Servidor: Tiene que elegir las opciones por su número");
                         opcionCliente = bf.readLine();	
 				        System.out.println("El cliente ha elegido la opción: " + opcionCliente + ", solicitando otra respuesta");
                         break;
