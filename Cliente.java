@@ -30,6 +30,7 @@ public class Cliente {
     int isbn = 0;
     String titulo;
     String autor;
+    String datosLibro;
     
 
     InputStreamReader entrada = new InputStreamReader(socketAlServidor.getInputStream());
@@ -60,7 +61,7 @@ public class Cliente {
     }else if (opcion == 2) {
         String mensajeServidor = bf.readLine();
 	    System.out.println(mensajeServidor);
-	    String saltoLinea = sc.nextLine();
+	    sc.nextLine();
         titulo = sc.nextLine();
         salida.println(titulo);
         mensajeServidor = bf.readLine();
@@ -68,13 +69,17 @@ public class Cliente {
     }else if (opcion == 3) {
     	String mensajeServidor = bf.readLine();
 	    System.out.println(mensajeServidor);
-	    String saltoLinea = sc.nextLine();
+	    sc.nextLine();
         autor = sc.nextLine();
         salida.println(autor);
         mensajeServidor = bf.readLine();
         System.out.println(mensajeServidor);
     }else if(opcion == 4) {
     	String mensajeServidor = bf.readLine();
+    	 sc.nextLine();
+         datosLibro = sc.nextLine();
+         salida.println(datosLibro);
+         mensajeServidor = bf.readLine();
 	    System.out.println(mensajeServidor);
     }else if (opcion == 5){
         String mensajeServidor = bf.readLine();

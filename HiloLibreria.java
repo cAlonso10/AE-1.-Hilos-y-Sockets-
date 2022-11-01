@@ -94,13 +94,13 @@ public class HiloLibreria implements Runnable{
                             String autorCliente = bf.readLine();	
     				        System.out.println("El " + hilo.getName() +  " cliente ha mandado el titulo: " + autorCliente);
                             ArrayList<String> librosEncontrados = new ArrayList<String>();
-                            
                             librosEncontrados.clear();
+                            //Recorremos el Array de libros buscando coincidencias y las añadimos a la lista de encontrados
     						for (int i = 0; i < listaLibros.size(); i++) {	
                                 if (autorCliente.equals(listaLibros.get(i).getAutor())) {
     								librosEncontrados.add((listaLibros.get(i)).toString());
                             }
-    						
+    						//Si al final de la búsqueda no se ha encontrado nada, librosEncontrados permanecerá vacío
     						}if (librosEncontrados.isEmpty()) {
     							salida.println("Servidor: No se encuentra el autor en la base de datos");
     							System.out.println("No se encuentra el autor en la base de datos");
@@ -111,8 +111,26 @@ public class HiloLibreria implements Runnable{
     						}
                         break;
                     case "4":
-                        salida.println("Servidor: Ha salido de la aplicacion");
-                        socketAlCliente.close();
+                        salida.println("Servidor: Introduzca los datos del libro a añadir seguido de comas");
+                        salida.println("Titulo, Autor, Precio, ISBN");
+						System.out.println("Esperando que el " +hilo.getName() + " mande datos del nuevo libro");
+                        String nuevoLibro = bf.readLine();
+                        System.out.println("El" + hilo.getName() + " cliente ha mandado los siguientes datos: " + nuevoLibro);
+                        salida.println("Añadiendo Libro....");
+                        //Guardamos los datos introducidos y los separamos por comas
+                        String[] datosLibro =  nuevoLibro.split(",[ ]*");
+                        //Asignamos cada nuevo dato a una variable para mayor claridad
+                        String nTitulo = datosLibro[0];
+                        String nAutor = datosLibro[1];
+                        int nPrecio = Integer.parseInt(datosLibro[2]);
+                        String nIsbn = datosLibro[3];
+                        //Añadimos un nuevo libro a la biblioteca con los datos dados
+                        listaLibros.add(new Libro(nTitulo,nAutor,nPrecio,nIsbn));
+                        salida.println("Se ha Añadido el Libro Correctamente");
+                        //Mostrar Libro Añadido:
+                        
+                        	
+                        
                     break;
                     case "5":
                         salida.println("Servidor: Ha salido de la aplicacion");
