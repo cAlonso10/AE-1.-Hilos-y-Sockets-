@@ -127,6 +127,8 @@ public class HiloLibreria implements Runnable{
                         salida.println("Servidor: Introduzca los datos del libro a añadir seguido de comas");
                         salida.println("Titulo, Autor, Precio, ISBN");
 						System.out.println("Esperando que el " +hilo.getName() + " mande datos del nuevo libro");
+						//Usamos un sincronizador de bloque para evitar que otros hilos añadan libros
+						synchronized(this){
                         String nuevoLibro = bf.readLine();
                         System.out.println("El " + hilo.getName() + " cliente ha mandado los siguientes datos: " + nuevoLibro);
                         salida.println("Añadiendo Libro....");
@@ -140,6 +142,7 @@ public class HiloLibreria implements Runnable{
                         //Añadimos un nuevo libro a la biblioteca con los datos dados
                         listaLibros.add(new Libro(nTitulo,nAutor,nPrecio,nIsbn));
                         salida.println("Se ha Añadido el Libro Correctamente");
+						}
                     break;
 					//Sirve para salir de la aplicación
                     case "5":
