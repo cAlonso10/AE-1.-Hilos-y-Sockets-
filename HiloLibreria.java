@@ -10,6 +10,7 @@ public class HiloLibreria implements Runnable{
 	private static int numeroCliente = 0;
 	private Socket socketAlCliente;	
 	
+	//Se crea la clase HiloLibreria, cada vez que se cree un hilo se suma +1 al contador del cliente, y comienza el hilo
 	public HiloLibreria(Socket socketAlCliente) {
 		numeroCliente++;
 		hilo = new Thread(this, "Cliente "+numeroCliente);
@@ -17,16 +18,20 @@ public class HiloLibreria implements Runnable{
 		hilo.start();
 	}
 	
+
+	//Se crean variables para la entrada y salida de mensajes del servidor
 	@Override
 	public void run() {
 		System.out.println("Estableciendo comunicacion con " + hilo.getName());
 		PrintStream salida = null;
 		InputStreamReader entrada = null;
 		BufferedReader bf = null;
+		//Variables para dar mensajes de error si no se encuentra el isbn o el titulo
 		boolean isbnMandado = false;
 		boolean tituloMandado = false;
 		
 		
+		//Se crean 5 libros y se almacenan en un ArrayList
 		ArrayList<Libro> listaLibros = new ArrayList<Libro>();
         Libro l1 = new Libro("Odisea", "Homero", 15, "78153012");
         Libro l2 = new Libro("Don Quijote de la Mancha", "Miguel de cervantes", 20, "10347860");
@@ -41,17 +46,22 @@ public class HiloLibreria implements Runnable{
         listaLibros.add(l5);
         listaLibros.add(l6);
 
+		//Funcionamiento del programa
         try {	
+			//Salida y entrada de mensajes del cliente-servidor
 			salida = new PrintStream(socketAlCliente.getOutputStream());
 			entrada = new InputStreamReader(socketAlCliente.getInputStream());
 			bf = new BufferedReader(entrada);
+
+			//Se crea una variable boleana para mantener el while siempre activo
             boolean continuar = true;
 			while(continuar){		
 				System.out.println("Esperando que el " +hilo.getName() + " eliga una opción");
 				String opcionCliente = bf.readLine();	
 				System.out.println("El " + hilo.getName()+ " ha elegido la opción: " + opcionCliente);
-				
+				//Con el switch se pueden elegir las diferentes opciones.
                 switch (opcionCliente) {
+					//Se consulta el ISBN, le mandas un ISBN y recorre la ArrayList mediante un for y comprueba 1 a 1 si ese ISBN existe, si existe manda los datos del libro
                     case "1":
                         salida.println("Servidor: Escriba el ISBN");
 						System.out.println("Esperando que el " +hilo.getName() + " mande un Isbn");
@@ -70,6 +80,7 @@ public class HiloLibreria implements Runnable{
 							System.out.println("No se encuentra el ISBN en la base de datos");
 						}
                     break;
+					//Se consulta el título, le mandas un título y recorre la ArrayList mediante un for y comprueba 1 a 1 si ese título existe, si existe manda los datos del libro
                     case "2":
 					salida.println("Servidor: Escriba el titulo");
 						System.out.println("Esperando que el " +hilo.getName() + " mande un titulo");
@@ -88,6 +99,7 @@ public class HiloLibreria implements Runnable{
 							System.out.println("No se encuentra el titulo en la base de datos");
 						}
                     break;
+					//Se consulta el autor, le mandas un autor y recorre la ArrayList mediante un for y comprueba 1 a 1 si ese autor existe, si existe manda todos los libros de ese autor
                     case "3":
     					salida.println("Servidor: Escriba el Autor");
     						System.out.println("Esperando que el " +hilo.getName() + " mande un Autor");
@@ -110,12 +122,13 @@ public class HiloLibreria implements Runnable{
 							salida.println("Se ha encontrado:" + librosEncontrados);
     						}
                         break;
+					//Sirve para añadir un nuevo libro, te pide los datos del libros, hay que mandarlos en 1 una misma linea separado por comas, añade el libro al ArrayList
                     case "4":
                         salida.println("Servidor: Introduzca los datos del libro a añadir seguido de comas");
                         salida.println("Titulo, Autor, Precio, ISBN");
 						System.out.println("Esperando que el " +hilo.getName() + " mande datos del nuevo libro");
                         String nuevoLibro = bf.readLine();
-                        System.out.println("El" + hilo.getName() + " cliente ha mandado los siguientes datos: " + nuevoLibro);
+                        System.out.println("El " + hilo.getName() + " cliente ha mandado los siguientes datos: " + nuevoLibro);
                         salida.println("Añadiendo Libro....");
                         //Guardamos los datos introducidos y los separamos por comas
                         String[] datosLibro =  nuevoLibro.split(",[ ]*");
@@ -127,16 +140,13 @@ public class HiloLibreria implements Runnable{
                         //Añadimos un nuevo libro a la biblioteca con los datos dados
                         listaLibros.add(new Libro(nTitulo,nAutor,nPrecio,nIsbn));
                         salida.println("Se ha Añadido el Libro Correctamente");
-                        //Mostrar Libro Añadido:
-                        
-                        	
-                        
                     break;
+					//Sirve para salir de la aplicación
                     case "5":
                         salida.println("Servidor: Ha salido de la aplicacion");
                         socketAlCliente.close();
                     break;
-                
+					//Hace que solo se puedan elegir una de las 5 opciones
                     default:
                         salida.println("Servidor: Tiene que elegir las opciones por su número");
                         opcionCliente = bf.readLine();	
@@ -147,6 +157,7 @@ public class HiloLibreria implements Runnable{
 				
 
 			}
+			//Cierra la conexión con el cliente
             socketAlCliente.close();
 		} catch (IOException e) {
 			System.err.println("HiloContadorLetras: Error de entrada/salida");

@@ -9,16 +9,9 @@ import java.util.ArrayList;
 
 public class Servidor {
 
-    
-
-    
-    
     public static final int PUERTO = 4000;
     
     public static void main(String[] args) throws InterruptedException {
-
-        
-        
 
         System.out.println("      Servidor      ");
         System.out.println("----------------------------------");
@@ -33,7 +26,7 @@ public class Servidor {
             
 			System.out.println("Esperando peticion por el puerto " + PUERTO);
 
-            
+            //Acepta todas las conexiones entrantes y abre un nuevo hilo para cada cliente
             while (true) {
                 Socket socketAlCliente = serverSocket.accept();
                 System.out.println("Se ha recibido la petición " + ++peticion);
